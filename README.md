@@ -1,6 +1,6 @@
-## Task Tracker SPA
+## Task Tracker 
 
-A simple Single Page Application (SPA) that helps users manage their daily tasks efficiently. Users can add, complete, delete, and store tasks in the browser using local storage.
+A simple Single Page Application  that helps users manage their daily tasks efficiently. Users can add, complete, delete, and store tasks in the browser using local storage.
 
 ## Features
 1. Add new tasks
