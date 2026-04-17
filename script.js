@@ -3,31 +3,16 @@ const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
 const error = document.getElementById("error");
 
-// Task storage in memory
+// Start EMPTY
 let tasks = [];
 
-// Load tasks from API when page loads
-document.addEventListener("DOMContentLoaded", loadTasksFromAPI);
+// Load (kept for structure, but DOES NOT auto-fill tasks)
+document.addEventListener("DOMContentLoaded", () => {
+  tasks = []; // important: empty start
+  renderTasks();
+});
 
-async function loadTasksFromAPI() {
-  try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
-    const data = await res.json();
-
-    tasks = data.map(task => ({
-      id: task.id,
-      text: task.title,
-      completed: task.completed
-    }));
-
-    renderTasks();
-  } catch (err) {
-    console.log("Error loading tasks:", err);
-    error.textContent = "Failed to load tasks from API";
-  }
-}
-
-// ADD TASK (API POST)
+// ADD TASK
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -41,7 +26,8 @@ form.addEventListener("submit", async function (e) {
   error.textContent = "";
 
   try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/todos", {
+    // fake API POST (optional, not used for real data)
+    await fetch("https://jsonplaceholder.typicode.com/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -52,20 +38,18 @@ form.addEventListener("submit", async function (e) {
       })
     });
 
-    const newTask = await res.json();
-
-    // Add to UI (API is fake, so we store locally in memory)
+    // add REAL user task
     tasks.push({
-      id: newTask.id,
+      id: Date.now(),
       text: taskText,
       completed: false
     });
 
-    renderTasks();
     input.value = "";
+    renderTasks();
 
   } catch (err) {
-    console.log("Error adding task:", err);
+    console.log(err);
     error.textContent = "Failed to add task";
   }
 });
@@ -103,12 +87,8 @@ function toggleTask(id) {
   renderTasks();
 }
 
-// DELETE TASK (API + UI)
+// DELETE TASK
 function deleteTask(id) {
-  fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-    method: "DELETE"
-  }).catch(err => console.log(err));
-
   tasks = tasks.filter(task => task.id !== id);
   renderTasks();
 }
